@@ -32,7 +32,11 @@ public class AddressBookParser {
     private static LinkedList<String> previous = new LinkedList<>();
 
     public static String getPrevious() {
-        return previous.getFirst();
+        StringBuilder commands = new StringBuilder("");
+        for (int i = 0; i < previous.size(); i++) {
+            commands.append(previous.get(i) + "\n");
+        }
+        return commands.toString();
     }
 
     /**
