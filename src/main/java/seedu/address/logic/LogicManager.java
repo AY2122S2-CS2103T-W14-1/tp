@@ -78,4 +78,19 @@ public class LogicManager implements Logic {
     public void setGuiSettings(GuiSettings guiSettings) {
         model.setGuiSettings(guiSettings);
     }
+
+    @Override
+    public String getPreviousCommand(boolean isPrev) {
+        return model.getPreviousCommand(isPrev);
+    }
+
+    @Override
+    public void resetLocation() {
+        model.resetLocation();
+    }
+
+    @Override
+    public void addPreviousCommand(String previousCommand) {
+        model.addPreviousCommand(previousCommand);
+    }
 }

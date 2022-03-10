@@ -50,6 +50,18 @@ public class CommandBox extends UiPart<Region> {
     }
 
     /**
+     *
+     */
+
+    public String getCommand() {
+        return commandTextField.getText().trim();
+    }
+
+    public void setCommandTextField(String command) {
+        commandTextField.setText(command);
+        commandTextField.positionCaret(command.length());
+    }
+    /**
      * Sets the command box style to use the default style.
      */
     private void setStyleToDefault() {

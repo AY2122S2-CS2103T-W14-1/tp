@@ -1,11 +1,13 @@
 package seedu.address.ui;
 
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -26,6 +28,7 @@ public class MainWindow extends UiPart<Stage> {
     private static final String FXML = "MainWindow.fxml";
 
     private final Logger logger = LogsCenter.getLogger(getClass());
+    private LinkedList<String> previous = new LinkedList<>();
 
     private Stage primaryStage;
     private Logic logic;
@@ -34,6 +37,7 @@ public class MainWindow extends UiPart<Stage> {
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private CommandBox commandBox;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -62,7 +66,6 @@ public class MainWindow extends UiPart<Stage> {
 
         // Configure the UI
         setWindowDefaultSize(logic.getGuiSettings());
-
         setAccelerators();
 
         helpWindow = new HelpWindow();
@@ -74,6 +77,20 @@ public class MainWindow extends UiPart<Stage> {
 
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+
+        primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.UP && event.getTarget() instanceof TextInputControl) {
+                //String command = commandBox.getCommand();
+                //logic.addPreviousCommand(command);
+                commandBox.setCommandTextField("add nothing");
+                event.consume();
+            } else if (event.getCode() == KeyCode.DOWN && event.getTarget() instanceof TextInputControl) {
+                //String command = commandBox.getCommand();
+                //logic.addPreviousCommand(command);
+                commandBox.setCommandTextField(logic.getPreviousCommand(false));
+                event.consume();
+            }
+        });
     }
 
     /**
@@ -174,6 +191,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
+            logic.addPreviousCommand(commandText);
             CommandResult commandResult = logic.execute(commandText);
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());

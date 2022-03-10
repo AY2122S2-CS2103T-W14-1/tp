@@ -12,6 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.storage.PreviousCommands;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -21,6 +22,7 @@ public class ModelManager implements Model {
 
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
+    private final PreviousCommands previousCommands;
     private final FilteredList<Person> filteredPersons;
 
     /**
@@ -33,6 +35,7 @@ public class ModelManager implements Model {
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
+        this.previousCommands = new PreviousCommands();
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
     }
 
@@ -146,5 +149,25 @@ public class ModelManager implements Model {
                 && userPrefs.equals(other.userPrefs)
                 && filteredPersons.equals(other.filteredPersons);
     }
+
+    //=========== Previous Command's =============================================================
+
+    @Override
+    public void addPreviousCommand(String command) {
+        this.previousCommands.addCommand(command);
+    }
+
+    @Override
+    public void resetLocation() {
+        this.previousCommands.resetLocation();
+    }
+
+    @Override
+    public String getPreviousCommand(Boolean isPrev) {
+        return this.previousCommands.getPreviousCommand(isPrev);
+    }
+
+
+
 
 }
